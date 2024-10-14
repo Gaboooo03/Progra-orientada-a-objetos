@@ -1,47 +1,67 @@
-let posX, posY;
-let velocidadX, velocidadY;
-let diametro;
-let radio;
 let fondo;
+let pelotas = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  fondo = color(random(100, 255), random(70), random(200));
 
-  radio = ceil(random(50, 100)); // Ajustado para un valor de radio más realista
-  diametro = radio * 2; // El diámetro es el doble del radio
+  for (let i = 0; i < 100; i++) {
+    let nuevaPelota = new pelota();
+    pelotas.push(nuevaPelota);
+  }
 
-  posX = random(radio, width - radio);
-  posY = random(radio, height - radio);
-
-  velocidadX = 40;
-  velocidadY = 40;
-
-  fondo = color(random(255), random(130), random(37));
+  //nuevaPelota = new pelota();
+  //pelota2 = new pelota();
 }
 
 function draw() {
   background(fondo);
-  fill(255);
-  noStroke();
+  for (let i = 0; i < 100; i++) {
+    pelotas[i].display();
+    pelotas[i].update();
+  }
+  /* 
+  nuevaPelota.update();
+  nuevaPelota.display();
+  pelota2.update();
+  pelota2.display();
+  */
+}
 
-  // Mover la posición del círculo
-  posX += velocidadX;
-  posY += velocidadY;
-
-  // Verificar colisiones con los bordes de la pantalla
-  if (posX - radio < 0 || posX + radio > width) {
-    velocidadX *= -1;
-
-    fondo = color(random(255), random(130), random(37));
+class pelota {
+  //plano de instrcciones para crear una pelota
+  constructor() {
+    this.radio = ceil(random(10, 30));
+    this.diametro = this.radio * 2;
+    this.posX = random(this.radio, width - this.radio);
+    this.posY = random(this.radio, height - this.radio);
+    this.velocidadX = 40;
+    this.velocidadY = 40;
+    console.log("ESTOY VIVAAAA!");
   }
 
-  if (posY - radio < 0 || posY + radio > height) {
-    velocidadY *= -1;
+  //métdos update
+  update() {
+    // Mover la posición del círculo
+    this.posX += this.velocidadX;
+    this.posY += this.velocidadY;
 
-    fondo = color(random(255), random(130), random(37));
+    // Verificar colisiones con los bordes de la pantalla
+    if (this.posX - this.radio < 0 || this.posX + this.radio > width) {
+      this.velocidadX *= -1;
+    }
+
+    if (this.posY - this.radio < 0 || this.posY + this.radio > height) {
+      this.velocidadY *= -1;
+    }
   }
-  // Dibujar el círculo
-  circle(posX, posY, diametro);
+  display() {
+    fill(255);
+    noStroke();
+
+    // Dibujar el círculo
+    circle(this.posX, this.posY, this.diametro);
+  }
 }
 
 /*
