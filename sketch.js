@@ -1,3 +1,60 @@
+let particulas = [];
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+}
+
+function draw() {
+  background(20);
+
+  // Crea una nueva partícula en la posición del ratón
+  let nuevaParticula = new Particula(mouseX, mouseY);
+  particulas.push(nuevaParticula);
+
+  // Actualiza y muestra las partículas
+  for (let i = particulas.length - 1; i >= 0; i--) {
+    particulas[i].update();
+    particulas[i].display();
+
+    // Elimina las partículas que ya no están "vivas"
+    if (!particulas[i].estaViva) {
+      particulas.splice(i, 1);
+    }
+  }
+
+  // Imprime el número de partículas restantes en la consola
+  console.log(particulas.length);
+}
+
+// Clase Particula
+class Particula {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.tamaño = random(5, 20);
+    this.velX = random(-2, 2);
+    this.velY = random(-2, 2);
+    this.vida = 255; // Duración de vida de la partícula
+  }
+
+  update() {
+    this.x += this.velX;
+    this.y += this.velY;
+    this.vida -= 5; // Disminuye la vida de la partícula
+  }
+
+  display() {
+    noStroke();
+    fill(255, this.vida);
+    ellipse(this.x, this.y, this.tamaño);
+  }
+
+  get estaViva() {
+    return this.vida > 0;
+  }
+}
+
+/*
 let fondo;
 let pelotas = [];
 
@@ -25,7 +82,7 @@ function draw() {
   nuevaPelota.display();
   pelota2.update();
   pelota2.display();
-  */
+  
 }
 
 class pelota {
@@ -64,7 +121,8 @@ class pelota {
   }
 }
 
-/*
+
+
 let frutas = [
   "Manzana",
   "Banana",
