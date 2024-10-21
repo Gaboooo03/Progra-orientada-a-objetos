@@ -7,6 +7,76 @@ function setup() {
 function draw() {
   background(20);
 
+  // Crear una nueva partícula
+  let nuevaParticula = new Particula(mouseX, mouseY);
+  particulas.push(nuevaParticula);
+
+  // Actualizar y mostrar todas las partículas
+  for (let i = 0; i < particulas.length; i++) {
+    particulas[i].update();
+    particulas[i].display();
+  }
+
+  // Eliminar las partículas que ya no están vivas
+  particulas = particulas.filter((pelota) => pelota.estaViva);
+
+  // Dibujar líneas entre las partículas
+  noFill();
+  stroke(252, 99, 56);
+  strokeWeight(1);
+
+  for (let i = 0; i < particulas.length - 1; i++) {
+    line(
+      particulas[i].posx,
+      particulas[i].posy,
+      particulas[i + 1].posx,
+      particulas[i + 1].posy
+    );
+  }
+
+  console.log(particulas.length);
+}
+
+// Definir la clase Particula
+class Particula {
+  constructor(x, y) {
+    this.posx = x;
+    this.posy = y;
+    this.velx = random(-1, 1);
+    this.vely = random(-1, 1);
+    this.estaViva = true;
+    this.tiempoDeVida = 255; // Desaparece después de un tiempo
+  }
+
+  update() {
+    this.posx += this.velx;
+    this.posy += this.vely;
+
+    // Reducir el tiempo de vida de la partícula
+    this.tiempoDeVida -= 2;
+    if (this.tiempoDeVida <= 0) {
+      this.estaViva = false;
+    }
+  }
+
+  display() {
+    fill(255, this.tiempoDeVida);
+    noStroke();
+    ellipse(this.posx, this.posy, 10);
+  }
+}
+
+/*
+let particulas = [];
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  noCursor();
+}
+
+function draw() {
+  background(20);
+
   // Crea una nueva partícula en la posición del ratón
   let nuevaParticula = new Particula(mouseX, mouseY);
   particulas.push(nuevaParticula);
@@ -31,7 +101,7 @@ class Particula {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.tamaño = random(5, 20);
+    this.tamaño = random(10, 30);
     this.velX = random(-2, 2);
     this.velY = random(-2, 2);
     this.vida = 255; // Duración de vida de la partícula
@@ -54,7 +124,7 @@ class Particula {
   }
 }
 
-/*
+
 let fondo;
 let pelotas = [];
 
